@@ -1,0 +1,46 @@
+<head>
+
+	<title>KISS - login</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+	<link rel="icon" href="/id/img/logo_tr.png">
+</head>
+
+
+
+
+<body class="bg-orange-50">
+
+	<div class="flex w-full h-full justify-center items-center">
+
+		<form action="login" method="POST" class="rounded p-4 flex flex-col border-black border-2">
+
+			<div class="text-xl font-bold pb-4 italic">
+				Kiss <div class="text-lg font-normal">(Kanti Interns Schuel System)</div>	
+
+			</div>
+
+			<label for="username">
+				<div class="font-bold">Username</div>
+
+			</label>	
+			<input class="bg-transparent border-b-2 border-black outline-none" type="text" placeholder="di kaschuso username" name="username">
+			
+			<label for="password" class="pt-4">
+				<div class="font-bold">Password</div>
+			</label>
+			<input class="bg-transparent border-b-2 border-black outline-none" type="password" name="password" placeholder="dis kaschuso passwort">
+			
+			<button type="submit" class="bg-black mt-4 p-2 w-full bg-black text-white font-bold text-lg rounded-md hover:bg-orange-50 border- hover:border-black hover:text-black transition ease-in">Ihlogge</button>
+
+		</form>
+
+	</div>
+
+</body>
