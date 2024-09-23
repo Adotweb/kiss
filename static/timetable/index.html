@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .timetable-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .day {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 13%;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .day h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .room, .short, .teachers, .classes {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .time {
+            font-weight: bold;
+        }
+        .multi-class {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Weekly Timetable</h1>
+    <a id="comparelink" href="/compare">compare to own</a>
+
+    <div id="timetable-container" class="timetable-container">
+        <!-- Timetable will be dynamically injected here -->
+    </div>
+
+    <script>
+      
+	    let params = new URLSearchParams(document.location.search)
+
+		window.title = "KISS - Timetable " + params.get("klasse")
+
+	    document.getElementById("comparelink").href = "/compare?klasse=" +  params.get("klasse")
+
+        function renderTimetable(data) {
+            const days = {
+                mon: 'Monday',
+                tue: 'Tuesday',
+                wed: 'Wednesday',
+                thu: 'Thursday',
+                fri: 'Friday',
+                sat: 'Saturday',
+                sun: 'Sunday'
+            };
+            
+            const container = document.getElementById('timetable-container');
+            Object.keys(data).slice(0, 5).forEach(dayKey => {
+                const dayData = data[dayKey];
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day';
+
+                const dayHeading = document.createElement('h2');
+                dayHeading.textContent = days[dayKey];
+                dayDiv.appendChild(dayHeading);
+
+                const table = document.createElement('table');
+                const tableHead = `<thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>`;
+                table.innerHTML = tableHead;
+
+                const tableBody = document.createElement('tbody');
+
+                dayData.forEach(entryGroup => {
+                    entryGroup.forEach(entry => {
+                        const row = document.createElement('tr');
+                        
+                        const timeCell = document.createElement('td');
+                        timeCell.className = 'time';
+                        timeCell.textContent = entry.time;
+                        row.appendChild(timeCell);
+                        
+                        const detailsCell = document.createElement('td');
+                        const shortSpan = document.createElement('span');
+                        shortSpan.className = 'short';
+                        shortSpan.textContent = entry.short;
+                        detailsCell.appendChild(shortSpan);
+                        
+                        detailsCell.innerHTML += `<br>Room: <span class="room">${entry.room}</span>`;
+                        detailsCell.innerHTML += `<br>Classes: <span class="classes">${entry.classes.join(', ')}</span>`;
+                        detailsCell.innerHTML += `<br>Teacher: <span class="teachers">${entry.teachers.join(', ')}</span>`;
+                        row.appendChild(detailsCell);
+
+                        tableBody.appendChild(row);
+                    });
+                });
+
+                table.appendChild(tableBody);
+                dayDiv.appendChild(table);
+                container.appendChild(dayDiv);
+            });
+        }
+
+        // Render the timetable
+
+
+			fetch("/timetable?klasse="  + params.get("klasse"), {method : "POST"}).then(res => res.json()).then(res => {
+				renderTimetable(res)
+			})
+    </script>
+
+</body>
+</html>
+
