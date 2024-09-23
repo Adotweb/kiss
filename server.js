@@ -1,54 +1,32 @@
 const express = require("express");
-const { MongoClient }=require("mongodb")
 const bodyparser = require("body-parser");
 
 const cookieparser = require("cookie-parser")
 
-const { validateSession, getValidatedSesh, is_valid_sesh } = require("../gisy/gisy")
+const { getValidatedSesh, is_valid_sesh } = require("./gisy/gisy")
 
 
+const {initDB, getDB} = require("./db/client")
 require("dotenv").config()
 
-let db = false;
 
 
-const getDB = () => db;
 
 const app = express();
 
 const fs = require("fs")
-const path = require("path")
+const path = require("path");
 
 
 const people = fs.readFileSync(path.resolve("gisy", "people.txt"), "utf8").split("\n").filter(s => s!="")
 .map(JSON.parse)
 
 app.use(cookieparser())
-app.use(async (req, res, next) => {
-
-	if(db){
-
-		let cookies = req.cookies;
-
-		console.log(cookies)
-
-		return next()
-	}
-	if(!db){
-		let client = new MongoClient(process.env.MONGO);
-		
-		await client.connect();
-
-		db = client.db("ksso");
-	}
-	
-	next()
-})
 
 app.use(bodyparser())
 app.use(express.json())
 
-app.use(express.static(__dirname + "/../static/"));
+app.use(express.static(__dirname + "/static/"));
 
 app.post("/login", async (req, res) => {
 
@@ -118,4 +96,6 @@ app.post("/compare", async (req, res) => {
 })
 
 
-module.exports = app;
+initDB(() => {
+	app.listen(process.env.PORT || 3000, ()=> console.log("hello"))
+})

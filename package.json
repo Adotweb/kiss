@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "main": "api/index.js",
   "scripts": {
-    "vercel-build": "next build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon dev_server.js"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

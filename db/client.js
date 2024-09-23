@@ -9,13 +9,17 @@ const client = new MongoClient(conn_string);
 let db = false;
 
 
-async function initDB(){
-	
+async function initDB(func){
+
+
+
+
 	try {
 
 		let connection = await client.connect();
 		db = connection.db("ksso");
-		console.log("conected")
+
+		func()
 	}catch(e){
 		console.error(e)
 	}
