@@ -6,7 +6,7 @@ let grade_requests = new Map();
 
 let send_grade_request = (username, password, res) => {	
 
-	if(ws.readyState == WebSocket.CLOSED){
+	if(ws.readyState != WebSocket.OPEN){
 		ws = new WebSocket("wss://localhost-njg5.onrender.com")
 	}
 	
