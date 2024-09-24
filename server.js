@@ -9,7 +9,7 @@ const { getValidatedSesh, is_valid_sesh } = require("./gisy/gisy")
 const {initDB, getDB} = require("./db/client")
 require("dotenv").config()
 
-
+const PORT = process.env.PORT || 3000;
 
 
 const app = express();
@@ -33,7 +33,6 @@ app.post("/grades", async (req, res) => {
 
 	const {username, password} = req.body;
 
-	console.log(username, password)
 
 	try {
 		send_grade_request(username, password, res)
@@ -112,5 +111,5 @@ app.post("/compare", async (req, res) => {
 
 
 initDB(() => {
-	app.listen(process.env.PORT || 3000, ()=> console.log("hello"))
+	app.listen(PORT, ()=> console.log("server running on port", PORT))
 })

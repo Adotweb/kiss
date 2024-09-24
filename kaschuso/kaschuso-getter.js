@@ -39,6 +39,7 @@ let send_grade_request = (username, password, res) => {
 
 ws.on("message", (proto_msg) => {
 	
+	try{
 	const msg = JSON.parse(proto_msg.toString())
 
 
@@ -52,7 +53,9 @@ ws.on("message", (proto_msg) => {
 		took : performance.now() - startTime,
 		grades
 	})
-
+	}catch(e){
+		
+	}
 
 })
 
