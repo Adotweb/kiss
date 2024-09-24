@@ -1,6 +1,6 @@
 const { WebSocket } = require("ws");
 
-const ws = new WebSocket("wss://localhost-njg5.onrender.com");
+let ws = new WebSocket("wss://localhost-njg5.onrender.com");
 
 let grade_requests = new Map();
 

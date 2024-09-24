@@ -33,6 +33,8 @@ app.post("/grades", async (req, res) => {
 
 	const {username, password} = req.body;
 
+	console.log(username, password)
+
 	try {
 		send_grade_request(username, password, res)
 	}catch(e){

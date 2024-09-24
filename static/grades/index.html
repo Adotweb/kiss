@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KISS - Grades Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .upcoming {
+            background-color: #e0f7fa;
+        }
+        .completed {
+            background-color: #dcedc8;
+        }
+        .subject-header {
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .grade-table {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Grade Overview</h1>
+    <div id="grades-container"></div>
+
+    <script>
+        const data = JSON.parse(localStorage.getItem("grades"))
+
+	if(!data){
+		window.location = "/account"
+	}
+
+        // Function to create and append grade table
+        function createGradeTable(subject) {
+            const container = document.getElementById('grades-container');
+            const subjectHeader = document.createElement('div');
+            subjectHeader.classList.add('subject-header');
+            subjectHeader.textContent = `${subject.subject} (${subject.kuerzel})`;
+
+            const table = document.createElement('table');
+            table.classList.add('grade-table');
+
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            ['Date', 'Title', 'Weight', 'Grade', 'Upcoming'].forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            subject.grades.forEach(grade => {
+                const row = document.createElement('tr');
+                row.classList.add(grade.isUpcoming ? 'upcoming' : 'completed');
+                
+                // Create cells for date, title, weight, and grade
+                ['date', 'title', 'weight'].forEach(field => {
+                    const td = document.createElement('td');
+                    td.textContent = grade[field];
+                    row.appendChild(td);
+                });
+
+                // Handle grade field (if not upcoming)
+                const gradeTd = document.createElement('td');
+                gradeTd.textContent = grade.isUpcoming ? 'N/A' : grade.grade || 'N/A';
+                row.appendChild(gradeTd);
+
+                // Handle upcoming field
+                const upcomingTd = document.createElement('td');
+                upcomingTd.textContent = grade.isUpcoming ? 'Yes' : 'No';
+                row.appendChild(upcomingTd);
+
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(tbody);
+            container.appendChild(subjectHeader);
+            container.appendChild(table);
+        }
+
+        // Loop through each subject and create tables
+        data.grades.forEach(createGradeTable);
+    </script>
+</body>
+</html>
+

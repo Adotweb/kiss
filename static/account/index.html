@@ -1,0 +1,59 @@
+<html>
+
+	<head>
+		<title>
+			KISS - Home
+		</title>
+
+
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="https://cdn.tailwindcss.com"></script>
+	</head>
+
+
+	<body>
+		
+		<input type="text" id="kaschuso_username">
+		<input type="password" id="kaschuso_password">
+		<button onclick="login()">login</button>	
+
+	</body>
+
+
+	<script>
+
+
+		async function login(){
+
+			let username = document.getElementById("kaschuso_username").value
+			let password = document.getElementById("kaschuso_password").value
+		
+
+			console.log(username, password)
+
+			let grades = await fetch("/grades", {
+				method:"POST",
+				headers : {
+					"Content-Type":"application/json"
+				},
+				body : JSON.stringify({
+					username,
+					password
+				})
+			}).then(res => res.json())
+
+			if(grades.grades.error){
+				alert(grades.grades.error)
+				return
+			}
+
+			localStorage.setItem("grades", JSON.stringify(grades))
+
+
+			window.location = "/grades"
+		}
+
+		
+	</script>
+</html>
