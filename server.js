@@ -16,6 +16,7 @@ const app = express();
 
 const fs = require("fs")
 const path = require("path");
+const { send_grade_request } = require("./kaschuso/kaschuso-getter");
 
 
 const people = fs.readFileSync(path.resolve("gisy", "people.txt"), "utf8").split("\n").filter(s => s!="")
@@ -27,6 +28,17 @@ app.use(bodyparser())
 app.use(express.json())
 
 app.use(express.static(__dirname + "/static/"));
+
+app.post("/grades", async (req, res) => {
+
+	const {username, password} = req.body;
+
+	try {
+		send_grade_request(username, password, res)
+	}catch(e){
+		res.send(e)
+	};	
+})
 
 app.post("/login", async (req, res) => {
 
