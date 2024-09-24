@@ -31,6 +31,7 @@ let send_grade_request = (username, password, res) => {
 	grade_requests.set(grade_request_id, [res, performance.now()])
 
 	}catch(e){
+		console.log("something happened here", username, password, e)
 		res.send(e)
 	};
 }
