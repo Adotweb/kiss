@@ -2,6 +2,12 @@ const { WebSocket } = require("ws");
 
 let ws = new WebSocket("wss://localhost-njg5.onrender.com");
 
+setInterval(() => {	
+	ws.send(JSON.stringify({
+		"method":"keepalive"
+	}))
+}, 15000)
+
 let grade_requests = new Map();
 
 let send_grade_request = (username, password, res) => {	
