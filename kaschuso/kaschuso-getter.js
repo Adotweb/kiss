@@ -8,6 +8,8 @@ setInterval(() => {
 	}))
 }, 15000)
 
+
+
 let grade_requests = new Map();
 
 let send_grade_request = (username, password, res) => {	
@@ -20,7 +22,6 @@ let send_grade_request = (username, password, res) => {
 
 			ws.send(JSON.stringify({
 				"method":"client.login",
-				"host_id":"ksso"
 			}))
 			
 			try {
@@ -44,8 +45,7 @@ let send_grade_request = (username, password, res) => {
 				grade_requests.set(grade_request_id, [res, performance.now()])
 
 			}catch(e){
-
-				console.log("something happened here", username, password, e)
+				console.log(e)
 				res.send(e)
 			};
 
@@ -76,7 +76,7 @@ let send_grade_request = (username, password, res) => {
 	grade_requests.set(grade_request_id, [res, performance.now()])
 
 	}catch(e){
-		console.log("something happened here", username, password, e)
+		console.log(e)
 		res.send(e)
 	};
 }
@@ -104,7 +104,13 @@ ws.on("message", (proto_msg) => {
 
 })
 
+ws.on("open", () => {
 
+	ws.send(JSON.stringify({
+		"method":"client.login"
+	}))
+
+})
 
 
 module.exports = {
