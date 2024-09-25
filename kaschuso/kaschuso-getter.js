@@ -20,6 +20,7 @@ let send_grade_request = (username, password, res) => {
 
 			ws.send(JSON.stringify({
 				"method":"client.login",
+				"host_id":"ksso"
 			}))
 			
 			try {
