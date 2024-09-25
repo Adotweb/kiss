@@ -33,6 +33,7 @@ app.post("/grades", async (req, res) => {
 
 	const {username, password} = req.body;
 
+	
 
 	try {
 		send_grade_request(username, password, res)
@@ -51,9 +52,14 @@ app.post("/login", async (req, res) => {
 	let session = await getValidatedSesh(username, password);
 	let is_gisy_user = await is_valid_sesh(session)
 
+	if(is_gisy_user){
+		res.cookie("user", username)
+		return res.redirect("/home")
+	}else {
+		res.send({error : "username or password wrong"})
+	}
 
 				
-	res.redirect("/home")
 })
 
 app.get("/search", async (req, res) => {

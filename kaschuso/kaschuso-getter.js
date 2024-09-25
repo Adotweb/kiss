@@ -14,6 +14,44 @@ let send_grade_request = (username, password, res) => {
 
 	if(ws.readyState != WebSocket.OPEN){
 		ws = new WebSocket("wss://localhost-njg5.onrender.com")
+
+		ws.on("open", () => {
+
+
+			ws.send(JSON.stringify({
+				"method":"client.login",
+			}))
+			
+			try {
+
+
+				let grade_request_id = crypto.randomUUID()
+
+		
+
+				ws.send(JSON.stringify({
+					method:"client.to_host"	,
+					host_id :"ksso",
+					data : {
+						username, 
+						password,
+						grade_request_id
+					}
+				}))
+
+
+				grade_requests.set(grade_request_id, [res, performance.now()])
+
+			}catch(e){
+
+				console.log("something happened here", username, password, e)
+				res.send(e)
+			};
+
+		})
+		
+		return
+			
 	}
 	
 	try {
@@ -65,15 +103,7 @@ ws.on("message", (proto_msg) => {
 
 })
 
-ws.on("open", () => {
 
-
-	ws.send(JSON.stringify({
-		"method":"client.login",
-	}))
-	
-	
-})
 
 
 module.exports = {
